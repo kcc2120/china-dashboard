@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/cron.py": {
-      "runtime": "@vercel/python"
-    }
-  },
   "crons": [
     {
       "path": "/api/cron",
