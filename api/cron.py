@@ -2,9 +2,10 @@ import requests
 from supabase import create_client
 from dbnomics import fetch_series
 import pandas as pd
+import os
 
-supabase_url = 'https://sbytfdyuhjzboifhiisl.supabase.co'
-supabase_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNieXRmZHl1aGp6Ym9pZmhpaXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNDM0MDIsImV4cCI6MjA4OTgxOTQwMn0.NCxNrG09wj55sov-CTrl45AiElRU4gXkSKaOQsrOXF0'
+supabase_url = os.environ['SUPABASE_URL']
+supabase_key = os.environ['SUPABASE_SERVICE_ROLE_KEY']
 
 supabase = create_client(supabase_url, supabase_key)
 
