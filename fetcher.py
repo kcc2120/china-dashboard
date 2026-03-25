@@ -30,8 +30,8 @@ indicators = {
         'abs_field': 'absolute_value'
     },
     'china_cpi': {
-        'dataset': 'M_A010101',
-        'series': 'A01010101',  # CPI index (same month last year=100, monthly)
+        'dataset': 'M_A01010G',
+        'series': 'A01010G01',  # CPI: Consumer Price Index, YoY %
         'yoy_field': 'yoy_change'
     },
     'china_pmi': {
@@ -44,11 +44,11 @@ indicators = {
         'series': 'A060J01',  # USD/CNY annual reference rate (USD=100)
         'value_field': 'exchange_rate'
     },
-    'china_fdi': {
-        'dataset': 'M_A0802',
-        'series': 'A08020C',  # FDI growth rate, monthly
-        'yoy_field': 'yoy_change'
-    },
+    # 'china_fdi': {
+    #     'dataset': 'M_A0802',
+    #     'series': 'A08020C',  # FDI growth rate, monthly - NO DATA AVAILABLE in DBnomics
+    #     'yoy_field': 'yoy_change'
+    # },
     'china_unemployment': {
         'dataset': 'M_A0E01',
         'series': 'A0E0101',  # Urban surveyed unemployment rate, monthly
