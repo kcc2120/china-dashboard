@@ -30,28 +30,28 @@ indicators = {
         'abs_field': 'absolute_value'
     },
     'china_cpi': {
-        'dataset': 'M_A01',
-        'series': 'A010101',
+        'dataset': 'M_A010101',
+        'series': 'A01010101',  # CPI index (same month last year=100, monthly)
         'yoy_field': 'yoy_change'
     },
     'china_pmi': {
-        'dataset': 'M_A014',
-        'series': 'A01401',
+        'dataset': 'M_A0B03',
+        'series': 'A0B0301',  # Comprehensive PMI output index
         'value_field': 'index_value'
     },
     'china_usd_cny': {
-        'dataset': 'M_A07',
-        'series': 'A070101',
+        'dataset': 'A_A060J',
+        'series': 'A060J01',  # USD/CNY annual reference rate (USD=100)
         'value_field': 'exchange_rate'
     },
     'china_fdi': {
-        'dataset': 'M_A023',
-        'series': 'A02301',
+        'dataset': 'M_A0802',
+        'series': 'A08020C',  # FDI growth rate, monthly
         'yoy_field': 'yoy_change'
     },
     'china_unemployment': {
-        'dataset': 'M_A0301',
-        'series': 'A030101',
+        'dataset': 'M_A0E01',
+        'series': 'A0E0101',  # Urban surveyed unemployment rate, monthly
         'value_field': 'unemployment_rate'
     }
 }
@@ -65,6 +65,10 @@ def fetch_and_store(table, config):
             value = row['value']
             if pd.isna(value):
                 continue
+
+            if table == 'china_cpi':
+                # CPI series values are index points (100 = same month last year); convert to YoY change %
+                value = float(value) - 100.0
 
             row_obj = {'date': date}
             if 'yoy_field' in config:
@@ -104,20 +108,27 @@ def fetch_and_store(table, config):
 
 def fetch_trade_balance():
     try:
-        exports_series = fetch_series('NBS', 'M_A020', 'A020101')
-        imports_series = fetch_series('NBS', 'M_A020', 'A020201')
+        exports_series = fetch_series('NBS', 'A_A0601', 'A060106')
+        imports_series = fetch_series('NBS', 'A_A0601', 'A060107')
+        balance_series = fetch_series('NBS', 'A_A0601', 'A060108')
 
         exports_by_date = {str(r['period']): r['value'] for _, r in exports_series.iterrows() if not pd.isna(r['value'])}
         imports_by_date = {str(r['period']): r['value'] for _, r in imports_series.iterrows() if not pd.isna(r['value'])}
+        balance_by_date = {str(r['period']): r['value'] for _, r in balance_series.iterrows() if not pd.isna(r['value'])}
 
-        all_dates = sorted(set(exports_by_date.keys()) | set(imports_by_date.keys()))
+        all_dates = sorted(set(exports_by_date.keys()) | set(imports_by_date.keys()) | set(balance_by_date.keys()))
 
         for dt in all_dates:
             export_val = exports_by_date.get(dt)
             import_val = imports_by_date.get(dt)
-            balance_val = None
-            if export_val is not None and import_val is not None:
-                balance_val = export_val - import_val
+            balance_val = balance_by_date.get(dt)
+
+            if export_val is not None:
+                export_val = float(export_val) / 1000.0  # million USD to billion USD
+            if import_val is not None:
+                import_val = float(import_val) / 1000.0
+            if balance_val is not None:
+                balance_val = float(balance_val) / 1000.0
 
             supabase.table('china_trade_balance').upsert({
                 'date': dt,
