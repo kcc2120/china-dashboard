@@ -108,18 +108,18 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4">
+    <div className="min-h-screen bg-white text-black p-4">
       <h1 className="text-3xl font-bold mb-6 text-center">China Economic Dashboard</h1>
       <div className="mb-6 flex justify-center">
         <button
           onClick={() => setMode('yoy')}
-          className={`mr-4 px-6 py-2 rounded ${mode === 'yoy' ? 'bg-blue-600' : 'bg-gray-700'}`}
+          className={`mr-4 px-6 py-2 rounded ${mode === 'yoy' ? 'bg-blue-600' : 'bg-gray-300'}`}
         >
           YoY %
         </button>
         <button
           onClick={() => setMode('absolute')}
-          className={`px-6 py-2 rounded ${mode === 'absolute' ? 'bg-blue-600' : 'bg-gray-700'}`}
+          className={`px-6 py-2 rounded ${mode === 'absolute' ? 'bg-blue-600' : 'bg-gray-300'}`}
         >
           Absolute Values
         </button>
@@ -127,7 +127,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {dashboards.map(panel => (
-          <div key={panel.key} className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          <div key={panel.key} className="bg-gray-100 p-6 rounded-lg shadow-lg">
             <h2 className="text-xl font-semibold mb-2">{panel.title}</h2>
             <p className="text-3xl font-bold">
               {getLatest(panel.key, panel.cardField)} {panel.suffix}
@@ -138,14 +138,14 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {dashboards.map(panel => (
-          <div key={panel.key} className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          <div key={panel.key} className="bg-gray-100 p-6 rounded-lg shadow-lg">
             <h3 className="text-lg font-semibold mb-4">{panel.title} Trend</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={getChartData(panel)}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis dataKey="date" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" />
-                <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" />
+                <XAxis dataKey="date" stroke="#6b7280" />
+                <YAxis stroke="#6b7280" />
+                <Tooltip contentStyle={{ backgroundColor: '#f9fafb', border: 'none' }} />
                 <Line type="monotone" dataKey="value" stroke="#3B82F6" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
